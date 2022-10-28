@@ -13,14 +13,28 @@ export default {
 				{
 					id: 1,
 					color: "green",
+					image: "./src/assets/images/socks_green.jpeg",
 				},
 				{
 					id: 2,
 					color: "blue",
+					image: "./src/assets/images/socks_blue.jpeg",
 				},
 			],
 			sizes: ["XS", "S", "M", "L", "XL"],
+			cart: 0,
 		};
+	},
+	methods: {
+		addToCart() {
+			this.cart += 1;
+		},
+		removeToCart() {
+			this.cart -= 1;
+		},
+		updateImage(variantImage) {
+			this.image = variantImage;
+		},
 	},
 };
 </script>
@@ -54,11 +68,16 @@ export default {
 					</ul>
 				</div>
 				<div class="circle__container">
-					<div v-for="variant in variants" :key="variant.id">
+					<div v-for="variant in variants" :key="variant.id" @mouseover="updateImage(variant.image)">
 						{{ variant.color }}
 					</div>
 				</div>
+				<div class="button__container">
+					<button class="button" @click="addToCart">Add to cart</button>
+					<button class="button" @click="removeToCart">Remove to cart</button>
+				</div>
 			</div>
+			<div class="cart">Cart ({{ cart }})</div>
 		</div>
 	</div>
 </template>

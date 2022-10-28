@@ -4,9 +4,7 @@ export default {
 		return {
 			product: "Socks",
 			description: "description",
-			image: "./src/assets/images/socks_green.jpeg",
 			url: "https://github.com/louiscollard/Workshop-Vue/tree/main/vue-project",
-			inStock: true,
 			onSale: true,
 			details: ["50% coton", "30% wool", "20% polyester"],
 			variants: [
@@ -14,15 +12,19 @@ export default {
 					id: 1,
 					color: "green",
 					image: "./src/assets/images/socks_green.jpeg",
+					quantity: 15,
 				},
 				{
 					id: 2,
 					color: "blue",
 					image: "./src/assets/images/socks_blue.jpeg",
+					quantity: 0,
 				},
 			],
 			sizes: ["XS", "S", "M", "L", "XL"],
 			cart: 0,
+			brand: "Vue mastery",
+			selectedVariant: 0,
 		};
 	},
 	methods: {
@@ -32,8 +34,26 @@ export default {
 		removeToCart() {
 			this.cart -= 1;
 		},
-		updateImage(variantImage) {
-			this.image = variantImage;
+		updateVariant(index) {
+			this.selectedVariant = index;
+		},
+	},
+	computed: {
+		title() {
+			return this.brand + " " + this.product;
+		},
+		image() {
+			return this.variants[this.selectedVariant].image;
+		},
+		inStock() {
+			return this.variants[this.selectedVariant].quantity;
+		},
+		onSale() {
+			if (this.onSale == true) {
+				return this.brand + " " + this.product + " is on sale !";
+			} else {
+				return this.brand + " " + this.product + " will be on sale soon !";
+			}
 		},
 	},
 };
@@ -45,12 +65,10 @@ export default {
 	<div class="product-display">
 		<div class="product-container">
 			<div class="product-image">
-				<a :href="url" target="_blank">
-					<img :src="image" />
-				</a>
+				<a :href="url" target="_blank"> <img :src="image" :class="{ outOfStockImg: !inStock }" /> </a>
 			</div>
 			<div class="product-info">
-				<h1>{{ product }}</h1>
+				<h1>{{ title }}</h1>
 				<p>{{ description }}</p>
 				<p v-if="inStock">In stock</p>
 				<p v-else>Out of stock</p>
@@ -68,13 +86,11 @@ export default {
 					</ul>
 				</div>
 				<div class="circle__container">
-					<div v-for="variant in variants" :key="variant.id" @mouseover="updateImage(variant.image)">
-						{{ variant.color }}
-					</div>
+					<div class="color-circle" :style="{ backgroundColor: variant.color }" v-for="(variant, index) in variants" :key="variant.id" @mouseover="updateVariant(index)"></div>
 				</div>
 				<div class="button__container">
-					<button class="button" @click="addToCart">Add to cart</button>
-					<button class="button" @click="removeToCart">Remove to cart</button>
+					<button class="button" @click="addToCart" :class="{ disabledButton: !inStock }" :disabled="!inStock">Add to cart</button>
+					<button class="button" @click="removeToCart" :class="{ disabledButton: cart == 0 }" :disabled="cart == 0">Remove to cart</button>
 				</div>
 			</div>
 			<div class="cart">Cart ({{ cart }})</div>

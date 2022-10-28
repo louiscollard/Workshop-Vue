@@ -1,47 +1,64 @@
-<script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+<script>
+export default {
+	data() {
+		return {
+			product: "Socks",
+			description: "description",
+			image: "./src/assets/images/socks_green.jpeg",
+			url: "https://github.com/louiscollard/Workshop-Vue/tree/main/vue-project",
+			inStock: true,
+			onSale: true,
+			details: ["50% coton", "30% wool", "20% polyester"],
+			variants: [
+				{
+					id: 1,
+					color: "green",
+				},
+				{
+					id: 2,
+					color: "blue",
+				},
+			],
+			sizes: ["XS", "S", "M", "L", "XL"],
+		};
+	},
+};
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
+	<div class="nav-bar"></div>
 
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
-
-  <main>
-    <TheWelcome />
-  </main>
+	<div class="product-display">
+		<div class="product-container">
+			<div class="product-image">
+				<a :href="url" target="_blank">
+					<img :src="image" />
+				</a>
+			</div>
+			<div class="product-info">
+				<h1>{{ product }}</h1>
+				<p>{{ description }}</p>
+				<p v-if="inStock">In stock</p>
+				<p v-else>Out of stock</p>
+				<p v-show="onSale">On Sale!</p>
+				<div class="list">
+					<ul>
+						<li v-for="detail in details">
+							{{ detail }}
+						</li>
+					</ul>
+					<ul>
+						<li v-for="size in sizes">
+							{{ size }}
+						</li>
+					</ul>
+				</div>
+				<div class="circle__container">
+					<div v-for="variant in variants" :key="variant.id">
+						{{ variant.color }}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </template>
-
-<style scoped>
-header {
-  line-height: 1.5;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-}
-</style>

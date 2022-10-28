@@ -48,7 +48,7 @@ export default {
 			}
 		},
 		removeToCart() {
-			if (this.variants[this.selectedVariant].quantity > 0) {
+			if (this.cart > 0) {
 				this.$emit("remove-to-cart");
 				this.variants[this.selectedVariant].quantity += 1;
 			}
